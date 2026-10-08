@@ -1,0 +1,532 @@
+/* =========================================
+   RESET & VARIABLES
+   ========================================= */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:      #0f0f1a;
+  --card:    #1a1a2e;
+  --card2:   #16213e;
+  --accent:  #e94560;
+  --accent2: #0f3460;
+  --text:    #eaeaea;
+  --muted:   #8892a4;
+  --green:   #4ecca3;
+  --yellow:  #f6c90e;
+  --radius:  14px;
+  --shadow:  0 8px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================================
+   BASE
+   ========================================= */
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 48px;
+}
+
+h2 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 14px;
+}
+
+/* =========================================
+   GRID LAYOUT
+   ========================================= */
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    "clock clock"
+    "todo  focus"
+    "links links";
+}
+
+@media (max-width: 680px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    grid-template-areas: "clock" "todo" "focus" "links";
+  }
+}
+
+/* =========================================
+   CARD
+   ========================================= */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* =========================================
+   CLOCK
+   ========================================= */
+#clock-card {
+  grid-area: clock;
+  text-align: center;
+  background: linear-gradient(135deg, var(--card2), var(--accent2));
+}
+
+#time {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  line-height: 1;
+}
+
+#date-display {
+  margin-top: 8px;
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+#greeting {
+  margin-top: 6px;
+  font-size: 1.15rem;
+  color: var(--green);
+  font-weight: 500;
+}
+
+/* =========================================
+   BUTTONS
+   ========================================= */
+.btn {
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: filter 0.2s, transform 0.1s;
+}
+
+.btn:hover  { filter: brightness(1.15); }
+.btn:active { transform: scale(0.96); }
+
+.btn.sm { padding: 7px 14px; font-size: 0.82rem; }
+
+.btn-accent { background: var(--accent);  color: #fff; }
+.btn-green  { background: var(--green);   color: #0f0f1a; }
+.btn-muted  { background: rgba(255,255,255,0.1); color: var(--text); }
+
+/* =========================================
+   TO-DO LIST
+   ========================================= */
+#todo-card { grid-area: todo; }
+
+.todo-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.todo-input-row input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.todo-input-row input:focus    { border-color: var(--accent); }
+.todo-input-row input::placeholder { color: var(--muted); }
+
+.priority-select {
+  padding: 10px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.priority-select option { background: #1a1a2e; }
+
+/* Stats */
+.todo-stats {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.todo-stats span { display: flex; align-items: center; gap: 5px; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-green  { background: var(--green); }
+.dot-accent { background: var(--accent); }
+
+/* Filters */
+.todo-filters {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* List */
+#todo-list {
+  list-style: none;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#todo-list::-webkit-scrollbar       { width: 4px; }
+#todo-list::-webkit-scrollbar-track { background: transparent; }
+#todo-list::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 4px; }
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.2s;
+  animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.todo-item:hover { background: rgba(255,255,255,0.07); }
+
+.todo-item.done .todo-text {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+/* Checkbox circle */
+.todo-check {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+
+.todo-item.done .todo-check {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.todo-check::after {
+  content: '✓';
+  color: #0f0f1a;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: none;
+}
+
+.todo-item.done .todo-check::after { display: block; }
+
+.todo-text { flex: 1; font-size: 0.92rem; }
+
+/* Priority badge */
+.todo-priority {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.priority-high   { background: rgba(233,69,96,0.2);  color: var(--accent); }
+.priority-medium { background: rgba(246,201,14,0.2); color: var(--yellow); }
+.priority-low    { background: rgba(78,204,163,0.2); color: var(--green);  }
+
+/* Delete button */
+.todo-delete {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: color 0.2s;
+  flex-shrink: 0;
+}
+
+.todo-delete:hover { color: var(--accent); }
+
+.todo-empty {
+  text-align: center;
+  padding: 32px 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.todo-actions {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* =========================================
+   FOCUS TIMER
+   ========================================= */
+#focus-card { grid-area: focus; }
+
+.timer-display {
+  text-align: center;
+  margin: 8px 0 18px;
+}
+
+.timer-ring {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 14px;
+}
+
+.timer-ring svg {
+  transform: rotate(-90deg);
+  width: 100%; height: 100%;
+}
+
+.bg-circle { stroke: rgba(255,255,255,0.07); }
+
+.fg-circle {
+  stroke: var(--accent);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s linear, stroke 0.3s;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  pointer-events: none;
+}
+
+.timer-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.timer-presets {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.preset-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.2s;
+}
+
+.preset-btn.active,
+.preset-btn:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.session-count {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.session-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.session-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+  transition: background 0.3s;
+}
+
+.session-dot.done { background: var(--accent); }
+
+/* =========================================
+   QUICK LINKS
+   ========================================= */
+#links-card { grid-area: links; }
+
+.links-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.links-header h2 { margin-bottom: 0; }
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.link-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+  position: relative;
+}
+
+.link-card:hover {
+  background: rgba(255,255,255,0.09);
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+.link-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  background: rgba(255,255,255,0.07);
+}
+
+.link-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.link-delete-btn {
+  position: absolute;
+  top: 5px; right: 6px;
+  background: none;
+  border: none;
+  color: transparent;
+  cursor: pointer;
+  font-size: 0.72rem;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.link-card:hover .link-delete-btn { color: var(--muted); }
+.link-delete-btn:hover             { color: var(--accent) !important; }
+
+/* Add-link form */
+#add-link-form {
+  display: none;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+#add-link-form.open { display: flex; }
+
+#add-link-form input {
+  flex: 1;
+  min-width: 120px;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#add-link-form input:focus       { border-color: var(--accent); }
+#add-link-form input::placeholder { color: var(--muted); }
+
+/* =========================================
+   TOAST NOTIFICATION
+   ========================================= */
+#toast {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--card);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.35s ease;
+  z-index: 999;
+  max-width: 280px;
+}
+
+#toast.show { transform: translateY(0); opacity: 1; }

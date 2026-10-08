@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dasbor Kehidupan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- ── CLOCK ── -->
+  <div class="card" id="clock-card">
+    <div id="time">00:00:00</div>
+    <div id="date-display"></div>
+    <div id="greeting"></div>
+  </div>
+
+  <!-- ── TO-DO LIST ── -->
+  <div class="card" id="todo-card">
+    <h2>📝 Daftar Tugas</h2>
+
+    <div class="todo-input-row">
+      <input type="text" id="todo-input" placeholder="Tambah tugas baru…" />
+      <select id="priority-select" class="priority-select">
+        <option value="medium">⚡ Sedang</option>
+        <option value="high">🔴 Tinggi</option>
+        <option value="low">🟢 Rendah</option>
+      </select>
+      <button class="btn btn-accent" onclick="addTodo()">＋ Tambah</button>
+    </div>
+
+    <div class="todo-stats">
+      <span><span class="dot dot-green"></span><span id="done-count">0</span> selesai</span>
+      <span><span class="dot dot-accent"></span><span id="left-count">0</span> tersisa</span>
+    </div>
+
+    <div class="todo-filters">
+      <button class="filter-btn active" onclick="setFilter('all', this)">Semua</button>
+      <button class="filter-btn" onclick="setFilter('active', this)">Aktif</button>
+      <button class="filter-btn" onclick="setFilter('done', this)">Selesai</button>
+    </div>
+
+    <ul id="todo-list"></ul>
+
+    <div class="todo-actions">
+      <button class="btn btn-muted sm" onclick="clearDone()">🗑 Hapus yang Selesai</button>
+    </div>
+  </div>
+
+  <!-- ── FOCUS TIMER ── -->
+  <div class="card" id="focus-card">
+    <h2>⏱ Timer Fokus</h2>
+
+    <div class="timer-display">
+      <div class="timer-ring">
+        <svg viewBox="0 0 160 160">
+          <circle class="bg-circle" cx="80" cy="80" r="70" fill="none" stroke-width="8"/>
+          <circle class="fg-circle" id="timer-arc" cx="80" cy="80" r="70" fill="none"
+            stroke-width="8" stroke-dasharray="439.82" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-text" id="timer-display">25:00</div>
+      </div>
+      <div class="timer-label" id="timer-label">🎯 Sesi Fokus</div>
+    </div>
+
+    <div class="timer-presets">
+      <button class="preset-btn active" onclick="setPreset(25,'focus',this)">25 menit</button>
+      <button class="preset-btn" onclick="setPreset(15,'focus',this)">15 menit</button>
+      <button class="preset-btn" onclick="setPreset(5,'break',this)">5 mnt istirahat</button>
+      <button class="preset-btn" onclick="setPreset(10,'break',this)">10 mnt istirahat</button>
+    </div>
+
+    <div class="timer-controls">
+      <button class="btn btn-accent" id="timer-start-btn" onclick="toggleTimer()">▶ Mulai</button>
+      <button class="btn btn-muted" onclick="resetTimer()">↺ Reset</button>
+    </div>
+
+    <div class="session-count">
+      Sesi selesai hari ini: <strong id="session-num">0</strong>
+      <div class="session-dots" id="session-dots">
+        <div class="session-dot"></div>
+        <div class="session-dot"></div>
+        <div class="session-dot"></div>
+        <div class="session-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── QUICK LINKS ── -->
+  <div class="card" id="links-card">
+    <div class="links-header">
+      <h2>🔗 Tautan Cepat</h2>
+      <button class="btn btn-accent sm" onclick="toggleAddLink()">＋ Tambah</button>
+    </div>
+
+    <div class="links-grid" id="links-grid"></div>
+
+    <form id="add-link-form" onsubmit="addLink(event)">
+      <input type="text" id="link-name"  placeholder="Nama (mis. Google)" required maxlength="24"/>
+      <input type="url"  id="link-url"   placeholder="https://..." required/>
+      <input type="text" id="link-emoji" placeholder="Emoji (mis. 🌐)" maxlength="4"/>
+      <button class="btn btn-green" type="submit">Simpan</button>
+      <button class="btn btn-muted" type="button" onclick="toggleAddLink()">Batal</button>
+    </form>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
